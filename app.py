@@ -1,18 +1,17 @@
 # ==========================================================
-# AI TEXT / PDF / IMAGE SUMMARIZER USING HUGGING FACE
+# AI TEXT / PDF / IMAGE SUMMARIZER
 #
 # Required packages:
 # pip install streamlit
 # pip install langchain
-# pip install langchain-huggingface
-# pip install huggingface_hub
+# pip install langchain_google_genai
 # pip install pypdf
 # pip install pillow
 # pip install pytesseract
 # pip install python-dotenv
 #
 # Create .env file:
-# HUGGINGFACE_API_KEY=hf_your_token_here
+# GOOGLE_API_KEY=hf_your_token_here
 #
 # Run:
 # streamlit run app.py
