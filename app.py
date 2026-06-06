@@ -26,6 +26,7 @@ from PIL import Image
 import pytesseract
 
 from langchain_google_genai import ChatGoogleGenerativeAI
+from gtts import gTTS
 
 # Load variables from .env file
 load_dotenv()
@@ -163,27 +164,70 @@ if st.button("Generate Summary"):
                    {content}
                 """
 
-        # Loading spinner
-        with st.spinner(
-            "Generating summary..."
-        ):
+        # Generate summary
+        with st.spinner("Generating summary..."):
 
-            response = llm.invoke(
-                prompt
-            )
+            response = llm.invoke(prompt)
+
+            summary = response.content
 
         # Display summary
-        st.subheader(
-            "Summary"
+        st.subheader("Summary")
+
+       
+        # st.write("Summary generated successfully")
+
+        st.markdown(summary)
+
+        # ==================================================
+        # TEXT TO SPEECH
+        # ==================================================
+        # st.write("Reached TTS section")
+        tts = gTTS(
+            text=summary,
+            lang="en"
         )
 
-        st.markdown(response.content)
+        audio_file = "summary.mp3"
 
-        # Optional extracted content
+        # tts.save(audio_file)
+        st.write("Creating audio file...")
+
+        try:
+           tts.save(audio_file)
+           st.success("Audio generated successfully")
+        except Exception as e:
+           st.error(f"Audio Error: {e}")
+
+        
+        # st.write("Audio file created")
+
+        st.subheader("🔊 Listen to Summary")
+
+        with open(audio_file, "rb") as audio:
+           
+           st.audio(audio.read(), format="audio/mp3")
+
+        # st.audio(
+        #     audio_bytes,
+        #     format="audio/mp3"
+        # )
+
+        # Download button
+
+        with open(audio_file, "rb") as file:
+
+            st.download_button(
+                label="⬇ Download Audio",
+                data=file,
+                file_name="summary.mp3",
+                mime="audio/mpeg"
+            )
+
+        # Extracted content
+
         with st.expander(
             "View Extracted Content"
         ):
 
-            st.write(
-                content
-            )
+            st.write(content)
